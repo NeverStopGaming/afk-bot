@@ -1,0 +1,12 @@
+{
+  "accounts": [
+    {
+      "host": "example.com",
+      "port": 25565,
+      "username": "yourEmail",
+      "password": "yourPassword",
+      "auth": "microsoft",
+      "disableChatSigning": true
+    }
+  ]
+}
