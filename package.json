@@ -13,7 +13,7 @@
     "typescript": "^4.8.4"
   },
   "scripts": {
-    "start": "tsc --resolveJsonModule && node index.js",
-    "build": "tsc --resolveJsonModule "
+    "start": "tsc && node index.js",
+    "build": "tsc"
   }
 }
