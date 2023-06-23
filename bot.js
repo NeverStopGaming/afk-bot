@@ -25,6 +25,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mineflayer_1 = require("mineflayer");
 const mineflayer_pathfinder_1 = require("mineflayer-pathfinder");
+const mineflayer_pvp_1 = require("mineflayer-pvp");
 const config = __importStar(require("./config.json"));
 config.accounts.forEach((account) => {
     joinServer(account);
@@ -32,6 +33,7 @@ config.accounts.forEach((account) => {
 function joinServer(options) {
     let bot = (0, mineflayer_1.createBot)(options);
     bot.loadPlugin(mineflayer_pathfinder_1.pathfinder);
+    bot.loadPlugin(mineflayer_pvp_1.plugin);
     bot.once("spawn", () => {
         const mcData = require("minecraft-data")(bot.version);
         const defaultMove = new mineflayer_pathfinder_1.Movements(bot, mcData);
@@ -55,6 +57,28 @@ function joinServer(options) {
             }
             if (command === "avoid") {
                 avoidPlayer(args[0]);
+            }
+            if (command === "stop") {
+                bot.pathfinder.setGoal(null);
+            }
+            if (command === "kill") {
+                const target = bot.players[args[0]]?.entity;
+                if (!target) {
+                    bot.chat("I don't see you !");
+                    return;
+                }
+                bot.pvp.attack(target);
+            }
+            if (command === "stopkill") {
+                bot.pvp.stop();
+            }
+            if (command === "drop") {
+                const slot = args[0];
+                bot.toss(parseInt(slot, 10), null, 1);
+            }
+            if (command === "slot") {
+                const slot = args[0];
+                bot.setQuickBarSlot(parseInt(slot, 10));
             }
         });
         function followPlayer(playername) {
