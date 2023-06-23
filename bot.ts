@@ -1,5 +1,6 @@
 import { BotOptions, createBot } from "mineflayer";
 import { pathfinder, Movements, goals } from "mineflayer-pathfinder";
+import { plugin } from "mineflayer-pvp";
 
 import * as config from "./config.json";
 
@@ -11,6 +12,7 @@ function joinServer(options: BotOptions) {
   let bot = createBot(options);
 
   bot.loadPlugin(pathfinder);
+  bot.loadPlugin(plugin);
 
   bot.once("spawn", () => {
     const mcData = require("minecraft-data")(bot.version);
@@ -42,6 +44,35 @@ function joinServer(options: BotOptions) {
 
       if (command === "avoid") {
         avoidPlayer(args[0]);
+      }
+
+      if (command === "stop") {
+        bot.pathfinder.setGoal(null);
+      }
+
+      if (command === "kill") {
+        const target = bot.players[args[0]]?.entity;
+
+        if (!target) {
+          bot.chat("I don't see you !");
+          return;
+        }
+
+        bot.pvp.attack(target);
+      }
+
+      if (command === "stopkill") {
+        bot.pvp.stop();
+      }
+
+      if (command === "drop") {
+        const slot = args[0];
+        bot.toss(parseInt(slot, 10), null, 1);
+      }
+
+      if (command === "slot") {
+        const slot = args[0];
+        bot.setQuickBarSlot(parseInt(slot, 10));
       }
     });
 
